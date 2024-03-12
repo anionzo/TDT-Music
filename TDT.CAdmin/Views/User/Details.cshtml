@@ -1,0 +1,135 @@
+﻿@using TDT.Core.DTO;
+@model TDT.Core.Models.User
+
+@{
+    ViewData["Title"] = "Details";
+}
+<style>
+    .confirm {
+        color: limegreen;
+    }
+    .unconfirm{
+        color: red;
+    }
+</style>
+<h2>Thông tin tài khoản</h2>
+<hr/>
+<div>
+    <dl class="row">
+        @* <dt class = "col-sm-3">
+            Mã tài khoản
+        </dt>
+        <dd class = "col-sm-9">
+            @Html.DisplayFor(model => model.Id)
+        </dd> *@
+        <dt class = "col-sm-3">
+            Tên tài khoản
+        </dt>
+        <dd class = "col-sm-9">
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+        <dt class = "col-sm-3">
+            Địa chỉ
+        </dt>
+        <dd class = "col-sm-9">
+            @Html.DisplayFor(model => model.Address)
+        </dd>
+        <dt class = "col-sm-3">
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd class = "col-sm-9">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt class = "col-sm-3">
+            Xác nhận email?
+        </dt>
+        <dd class = "col-sm-9">
+            @if (Model.EmailConfirmed)
+            {
+                <span class="confirm">Đã xác nhận</span>
+            }
+            else
+            {
+                <span class="unconfirm">Chưa xác nhận</span>
+            }
+        </dd>
+        <dt class = "col-sm-3">
+            Mật khẩu
+        </dt>
+        <dd class = "col-sm-9">
+            ********
+        </dd>
+        <dt class = "col-sm-3">
+            Số điện thoại
+        </dt>
+        <dd class = "col-sm-9">
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+        <dt class = "col-sm-3">
+           Xác nhận số điện thoại?
+        </dt>
+        <dd class = "col-sm-9">
+            @if (Model.PhoneNumberConfirmed)
+            {
+                <span class="confirm">Đã xác nhận</span>
+            }
+            else
+            {
+                <span class="unconfirm">Chưa xác nhận</span>
+            }
+        </dd>
+        <dt class = "col-sm-3">
+            Thời hạn tạm khóa
+        </dt>
+        <dd class = "col-sm-9">
+            @Html.DisplayFor(model => model.LockoutEnd)
+        </dd>
+        <dt class = "col-sm-3">
+            Tài khoản đang tạm khóa?
+        </dt>
+        <dd class = "col-sm-9">
+            @if (Model.LockoutEnabled)
+            {
+                <span class="confirm">Đang tạm khóa</span>
+            }
+            else
+            {
+                <span class="unconfirm">Không</span>
+            }
+        </dd>
+        <dt class = "col-sm-3">
+            Số lần truy cập thất bại
+        </dt>
+        <dd class = "col-sm-9">
+            @Html.DisplayFor(model => model.AccessFailedCount)
+        </dd>
+        <dt class = "col-sm-3">
+            Ngày tạo lập
+        </dt>
+        <dd class = "col-sm-9">
+            @Model.CreateDate?.ToString("dd/MM/yyyy HH:mm:ss")
+        </dd>
+        <dt class="col-sm-3">
+            Danh sách role đã đăng ký
+        </dt>
+        <dd class="col-sm-9" style="height: 200px; overflow: auto">
+            @if(ViewBag.roles.Count != 0){
+                string rs = "";
+                @foreach (var role in (IList<RoleDTO>)ViewBag.roles)
+                {
+                    rs += @role.Name + ", ";
+                }
+                rs = rs.Substring(0, rs.Length - 2);
+                <div>@rs</div>
+            }
+            else
+            {
+                <span style="color:red">Chưa có role nào</span>
+            }
+        </dd>
+    </dl>
+</div>
+<div>
+    @Html.ActionLink("Cập nhật thông tin tài khoản", "Edit", new { id = Model.UserName }) |
+    <a asp-action="Index">Trở về trang trước</a>
+</div>

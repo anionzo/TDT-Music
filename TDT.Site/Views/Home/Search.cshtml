@@ -1,0 +1,175 @@
+﻿@{
+    ViewData["Title"] = "Tìm Kiếm";
+                        <link rel="stylesheet" href="~/css/search.css" />
+    string key = ViewData["key"].ToString();
+    int songSize = ViewData["SongSize"] != null ? int.Parse(ViewData["SongSize"].ToString()) : 0;
+    int playlistSize = ViewData["PlaylistSize"] != null ? int.Parse(ViewData["PlaylistSize"].ToString()) : 0;
+    int artistSize = ViewData["ArtistSize"] != null ? int.Parse(ViewData["ArtistSize"].ToString()) : 0;
+    int size_ajax = int.Parse(ViewData["SizeAjax"].ToString());
+}
+<style>
+    .checkbox {
+        display:none;
+    }
+
+    .no-content-box {
+        width: 100%;
+        padding: 30px 0;
+        min-height: 220px;
+        background-color: var(--alpha-bg);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center
+    }
+</style>
+<main class="zm-section" id="body-scroll"
+    style="position: absolute; inset: 0px; overflow: hidden scroll; margin-right: -6px; margin-bottom: 0px;">
+    <div class="container">
+        <nav class="zm-navbar zm-search-narbar zm-navbar-wrap">
+            <div class="zm-narbar-container">
+                <h3 class="title">Kết Quả Tìm Kiếm</h3>
+                <ul class="zm-navbar-menu">
+                    <li class="zm-navbar-item is-active song">
+                        <div class="navbar-link"><a class="">Bài hát</a></div>
+                    </li>
+                    <li class="zm-navbar-item playlist">
+                        <div class="navbar-link"><a class="">playlist/album</a>
+                        </div>
+                    </li>
+                    <li class="zm-navbar-item artist">
+                        <div class="navbar-link"><a class="">Nghệ sĩ/OA</a></div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="container" id="con-body">
+            <div class="list-song list-border">
+
+            </div>
+        </div>
+    </div>
+    
+</main>
+
+<script>
+    var htmlNodata = `<div class="no-content-box"><i class="icon main-icon ic-svg-dics-music-icon"></i><span class="no-content-text">Không có tìm thấy dữ liệu phù hợp</span></div>`;
+    function getSong() {
+        $('#con-body').html('<div class="list-song list-border"></div>');
+        var len = Math.ceil(@Html.Raw(songSize) / @Html.Raw(size_ajax));
+        var iComplete = 1;
+        HoldOn.open();
+        for (var i = 1; i <= len; i++) {
+            $.ajax({
+                type: "POST",
+                url: "/Home/GetHtmlSong",
+                data: {
+                    key: "@Html.Raw(key)",
+                    s: i
+                },
+                success: function (data) {
+                    if (data != '') {
+                        $('.list-song').append(data);
+                        HoldOn.close();
+                    }
+                },
+                complete: function () {
+                    if (iComplete++ == len) {
+                        sleep(1000).then(() => {
+                            HoldOn.close();
+                            if ($('.list-song').html() == '') {
+                                $('.list-song').html(htmlNodata);
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    }
+    function getPlaylist() {
+        $('#con-body').html('<div class="list-playlist list-border"></div>');
+        var len = Math.ceil(@Html.Raw(playlistSize) / @Html.Raw(size_ajax));
+        var iComplete = 1;
+        HoldOn.open();
+        for (var i = 1; i <= len; i++) {
+            $.ajax({
+                type: "POST",
+                url: "/Home/GetHtmlPlaylist",
+                data: {
+                    key: "@Html.Raw(key)",
+                    s: i
+                },
+                success: function (data) {
+                    if (data != '') {
+                        $('.list-playlist').append(data);
+                        HoldOn.close();
+                    }
+                },
+                complete: function () {
+                    console.log(iComplete)
+                    if (iComplete++ == len) {
+                        sleep(1000).then(() => {
+                            HoldOn.close();
+                            if ($('.list-playlist').html() == '') {
+                                $('.list-playlist').html(htmlNodata);
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    }
+    function getArtist() {
+        $('#con-body').html('<div class="list-artist list-border"></div>');
+        var len = Math.ceil(@Html.Raw(artistSize) / @Html.Raw(size_ajax));
+        var iComplete = 1;
+        HoldOn.open();
+        for (var i = 1; i <= len; i++) {
+            $.ajax({
+                type: "POST",
+                url: "/Home/GetHtmlArtist",
+                data: {
+                    key: "@Html.Raw(key)",
+                    s: i
+                },
+                success: function (data) {
+                    if (data != '') {
+                        $('.list-artist').append(data);
+                        HoldOn.close();
+                    }
+                },
+                complete: function () {
+                    if (iComplete++ == len) {
+                        sleep(1000).then(() => {
+                            HoldOn.close();
+                            if ($('.list-artist').html() == '') {
+                                $('.list-artist').html(htmlNodata);
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    }
+    $(document).ready(function () {
+        if("@Html.Raw(key)" != "") {
+            $('input[name="key"]').val("@Html.Raw(key)");
+        }
+        getSong();
+        $('.song').click(function () {
+            $('.zm-navbar-item.is-active').removeClass('is-active');
+            $(this).addClass('is-active');
+            getSong();
+        });
+        $('.playlist').click(function () {
+            $('.zm-navbar-item.is-active').removeClass('is-active');
+            $(this).addClass('is-active');
+            getPlaylist();
+        });
+        $('.artist').click(function () {
+            $('.zm-navbar-item.is-active').removeClass('is-active');
+            $(this).addClass('is-active');
+            getArtist();
+        });
+    });
+</script>

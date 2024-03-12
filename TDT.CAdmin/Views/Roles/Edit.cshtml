@@ -1,0 +1,123 @@
+﻿@using TDT.Core.DTO;
+@model TDT.Core.DTO.RoleDTO
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    IList<PermissionDTO> perms = ViewBag.perms ?? new List<PermissionDTO>();
+    IList<PermissionDTO> rolePerms = ViewBag.rolePerms ?? new List<PermissionDTO>();
+}
+<h2 class="title-admin">Chỉnh sửa vai trò</h2>
+<hr />
+<form asp-action="Edit" class="row">
+    <div class="col-md-4">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Id" class="control-label"></label>
+            <input asp-for="Id" class="form-control" readonly />
+            <span asp-validation-for="Id" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control" required oninput="validateName(this, 'name-message');" />
+            <span asp-validation-for="Name" class="text-danger" id="name-message"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Description" class="control-label"></label>
+            <input asp-for="Description" class="form-control" required oninput="validateDescription(this, 'description-message');" />
+            <span asp-validation-for="Description" class="text-danger" id="description-message"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="CreateDate" class="control-label"></label>
+            <input asp-for="CreateDate" class="form-control" readonly />
+            <span asp-validation-for="CreateDate" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Lưu" class="btn btn-primary" />
+        </div>
+    </div>
+    <div class="col-md-2"></div>
+    <div class="form-group col-md-5">
+        <label class="control-label">
+            Phân quyền cho vai trò
+            <input id="choose-all-role" title="Chọn tất cả" style="margin-left: 10px" type="checkbox" value="">
+        </label>
+        <div class="row roles role-assigment-panel">
+            @foreach (var perm in perms)
+            {
+                string chk = "";
+                @if (rolePerms.Any(r => r.Id == perm.Id))
+                {
+                    chk = "checked";
+                }
+                <label class="col-md-12">
+                    <input style="margin-left: 10px" type="checkbox" name="UserRoles" value="@perm.Id" @chk>
+                    <span>@perm.Name</span>
+                </label>
+            }
+        </div>
+    </div>
+</form>
+<div>
+    <a asp-action="Index">Trở về trang trước</a>
+</div>
+
+<script>    
+    checkAllInputChecked();
+    $('.roles input[name="UserRoles"]').on('change', function (e) {
+        console.log('change?');
+        checkAllInputChecked();
+    });
+    $('#choose-all-role').on('click', function (e) {
+        var checkboxs = $('.roles input[type="checkbox"]');
+        if ($(this).is(':checked')) {
+            checkboxs.prop('checked', true);
+        } else {
+            checkboxs.prop('checked', false);
+        }
+    });
+    function checkAllInputChecked(){
+        if ($('.roles input[name="UserRoles"]:checked').length == $('.roles input[name="UserRoles"]').length) {
+            $('#choose-all-role').prop('checked', true);
+        }else{
+            $('#choose-all-role').prop('checked', false);
+        }
+    }
+    function validateName(input, messageSpanId) {
+        const errorMessage = validateNoSpecialChars(input) || validateMinLength(input, 4);
+        const messageSpan = document.getElementById(messageSpanId);
+        if (errorMessage) {
+            messageSpan.textContent = errorMessage;
+            return false; // Có lỗi
+        } else {
+            messageSpan.textContent = '';
+            return true; // Không có lỗi
+        }
+    }
+
+    function validateDescription(input, messageSpanId) {
+        const errorMessage = validateMinLength(input, 10);
+        const messageSpan = document.getElementById(messageSpanId);
+        if (errorMessage) {
+            messageSpan.textContent = errorMessage;
+            return false; // Có lỗi
+        } else {
+            messageSpan.textContent = '';
+            return true; // Không có lỗi
+        }
+    }
+    document.getElementById("create-form").onsubmit = function () {
+        const isNameValid = validateName(document.getElementById("Name"), 'name-message');
+        const isDescriptionValid = validateDescription(document.getElementById("Description"), 'description-message');
+
+        return isNameValid && isDescriptionValid;
+    };
+
+</script>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+    

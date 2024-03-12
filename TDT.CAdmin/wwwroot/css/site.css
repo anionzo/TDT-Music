@@ -1,0 +1,274 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+a.navbar-brand {
+  white-space: normal;
+  text-align: center;
+  word-break: break-all;
+}
+
+/* Provide sufficient contrast against white background */
+a {
+  color: #0366d6;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  font-size: 14px;
+}
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.border-top {
+  border-top: 1px solid #e5e5e5;
+}
+.border-bottom {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy {
+  font-size: 1rem;
+  line-height: inherit;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+  background-color: var(--bg-temp);
+}
+
+body {
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+    background-color: var(--bg-temp);
+}
+
+#main-content {
+    background-color: var(--bg-main-content);
+}
+
+.navbar {
+    box-shadow: var(--navbar-shadow);
+}
+
+.navbar i {
+    color: var(--color-icon-nav);
+}
+
+.nav-link {
+    color: var(--color-temp);
+}
+
+.nav-link > i {
+    margin-left: auto;
+    margin-right: 4px;
+}
+
+#profileDropdown ~ div,
+#messageDropdown ~ div,
+#notificationDropdown ~ div {
+    background-color: var(--bg-popup);
+    color: var(--color-change);
+}
+
+#profileDropdown ~ div a,
+#messageDropdown ~ div a,
+#notificationDropdown ~ div a {
+    color: var(--color-change);
+}
+
+#profileDropdown ~ div a:hover,
+#messageDropdown ~ div a:hover,
+#notificationDropdown ~ div a:hover,
+#sidebar .nav .nav-item:hover > a {
+    background-color: var(--bg-hover);
+}
+
+.navbar-nav > .nav-item > .dropdown-menu {
+    box-shadow: var(--popup-shadow) !important;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px; /* Vertically center the text there */
+}
+
+
+
+/*Phân Trang*/
+/* Container cho điều hướng phân trang */
+.pagedList-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+
+/* Điều hướng trang */
+.pagedList a,
+.pagedList span {
+    padding: 5px 10px;
+    margin: 0 5px;
+    color: #007bff;
+    border: 1px solid #007bff;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+    .pagedList a:hover {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+/* Trang hiện tại */
+.active span {
+    background-color: #007bff !important;
+    color: #fff;
+    border: 1px solid #007bff !important;
+    box-shadow: 0 0 5px #007bff !important; /* Tạo hiệu ứng nổi lên */
+    border-radius: 5px;
+}
+
+/* Nút 'Trước' và 'Tiếp theo' */
+.pagedList .pagedListNav {
+    margin: 10px 0;
+}
+
+.toast-success {
+    background-color: #51A351;
+}
+#toast-container > div{
+    opacity: 0.9;
+}
+/*Sửa màu text của Input admin thành màu đen*/
+.form-group input {
+    color: black;
+}
+
+
+/*H1 admin title*/
+.title-admin {
+    color: red;
+    text-align: center;
+    font-weight: bold;
+}
+
+.card {
+    --bs-card-spacer-y: 1rem;
+    --bs-card-spacer-x: 1rem;
+    --bs-card-title-spacer-y: 0.5rem;
+    --bs-card-border-width: 0;
+    --bs-card-border-color: rgba(0, 0, 0, 0.125);
+    --bs-card-border-radius: 1rem;
+    --bs-card-box-shadow: 0 20px 27px 0 rgba(0, 0, 0, 0.05);
+    --bs-card-inner-border-radius: 1rem;
+    --bs-card-cap-padding-y: 0.5rem;
+    --bs-card-cap-padding-x: 1rem;
+    --bs-card-cap-bg: #fff;
+    --bs-card-cap-color:;
+    --bs-card-height:;
+    --bs-card-color:;
+    --bs-card-bg: #fff;
+    --bs-card-img-overlay-padding: 1rem;
+    --bs-card-group-margin: 0.75rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    height: var(--bs-card-height);
+    word-wrap: break-word;
+    background-color: var(--bs-card-bg);
+    background-clip: border-box;
+    border: var(--bs-card-border-width) solid var(--bs-card-border-color);
+    border-radius: var(--bs-card-border-radius);
+}
+}
+
+
+
+/*Phân trang 2*/
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+    .pagination ul {
+        list-style: none;
+        padding: 0;
+        display: flex;
+    }
+
+    .pagination a {
+        padding: 5px 10px;
+        margin: 0 5px;
+        color: #007bff;
+        border: 1px solid #007bff;
+        border-radius: 5px;
+        text-decoration: none;
+    }
+
+        .pagination a:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+    .pagination .active a {
+        background-color: #007bff !important;
+        color: #fff;
+        border: 1px solid #007bff !important;
+        box-shadow: 0 0 5px #007bff !important; /* Tạo hiệu ứng nổi lên */
+        border-radius: 5px;
+    }
+
+        .pagination .active a:hover {
+            background-color: #0056b3;
+        }
+
+#pageInput {
+    width: 50px;
+    padding: 5px 10px;
+    margin: 0 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#goToPageButton {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: 1px solid #007bff;
+    box-shadow: 0 0 5px #007bff !important; /* Tạo hiệu ứng nổi lên */
+
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+    #goToPageButton:hover {
+        background-color: #c82333;
+    }

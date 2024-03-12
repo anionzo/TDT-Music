@@ -1,0 +1,252 @@
+﻿@using TDT.Core.DTO.Firestore;
+@using TDT.Core.Helper;
+@model PageList<List<PlaylistDTO>>
+
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    int maxLength = 25; // Đặt giá trị tối đa
+}
+<h2 class="title-admin">Danh Sách Play List</h2>
+
+<div class="row">
+    <div class="col-3">
+        <a type="button" class="btn btn-outline-dark" asp-action="Create">Tạo Tạo Play List Mới</a>
+    </div>
+    <div class="col-6">
+        @{
+            if (ViewBag.SearchTerm != "")
+            {
+                <p>Số Play List tìm được: @ViewBag.SoBH</p>
+            }
+        }
+    </div>
+    <div class="col-3 input-group mb-3 ">
+        <input type="text" class="form-control border" placeholder="Nhập vào tên playlist cần tìm"
+               aria-label="Nhập vào tên playlist cần tìm" aria-describedby="button-search"
+               id="searchTerm" value="@ViewBag.SearchTerm">
+        <div class="input-group-append">
+            <button class="btn btn-outline-dark" type="button" id="button-search">
+                <i class="fa fa-search" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="table-container"> 
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Mã ID
+                </th>
+                <th>
+                    Tiêu Đề
+                </th>
+                <th>
+                    Ảnh
+                </th>
+                <th>
+                    Ngày Phát Hành
+                </th>
+                <th>
+                    PR
+                </th>
+                <th>
+                    Tên Nghệ Sĩ
+                </th>
+                <th>
+                    UID
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.encodeId)
+                    </td>
+                    <td>
+                        @{
+                            string truncatedTitle = "--";
+                            if(item.title != null)
+                            {
+                                truncatedTitle = item.title.Length > maxLength
+                                ? item.title.Substring(0, maxLength) + "..."
+                                : item.title;
+                            }
+                        }
+                        @truncatedTitle
+                    </td>
+                    <td class="img_song" encodeid="@item.encodeId" thumbnail="@item.thumbnail">
+                    <td>
+                            @item.ReleaseDate()
+                    </td>
+                    <td>
+                            @Html.DisplayFor(modelItem => item.PR)
+                    </td>
+                    <td>
+                            @{
+                                string truncatedArtistsNames;
+                                if (item.artistsNames == null)
+                                {
+                                    truncatedArtistsNames = "--";
+                                }
+                                else
+                                {
+                                    truncatedArtistsNames = item.artistsNames.Length > maxLength
+                                    ? item.artistsNames.Substring(0, maxLength) + "..."
+                                    : item.artistsNames;
+                                }
+                            }
+                            @truncatedArtistsNames
+                    </td>
+                    <td>
+                            @{
+                                string truncateduid = "--";
+                                if (item.uid != null)
+                                {
+                                    truncateduid = item.uid.Length > 10
+                                    ? item.uid.Substring(0, 10) + "..."
+                                    : item.uid;
+                                }
+                            }
+                            @truncateduid
+                    </td>
+                    <td class="btn-control">
+                        <a title="Chi tiết" href="@Url.Action("Details", "PlaylistManagement", new { id = item.encodeId})">
+                            <div class="fa fa-eye" aria-hidden="true">
+                            </div>
+                        </a>
+                        <a title="Cập nhật thông tin" href="@Url.Action("Edit", "PlaylistManagement", new { id = item.encodeId})">
+                            <div class="fa" aria-hidden="true">
+                                <svg style="fill: #ffbc0a;" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
+                                    <path d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z" />
+                                </svg>
+                            </div>
+                        </a>
+                        <a title="Xóa" onclick="DVNConfirm('Xóa', 'Playlist' , '/PlaylistManagement/Delete' , '@item.encodeId')">
+                            <div class="fa" aria-hidden="true">
+                                <svg style="fill: #fc424a" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                                    <path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z" />
+                                </svg>
+                            </div>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Hiển thị điều hướng phân trang -->
+<div class="pagination">
+    <ul>
+        @{
+            int soquaylai = Model.PageNumber - 1;
+            int sotienlen = Model.PageNumber + 1;
+            string sr = ViewBag.SearchTerm;
+        }
+        @if (Model.PageNumber > 1)
+        {
+            <li><a asp-action="Index" asp-route-page="" asp-route-searchTerm="@sr"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a></li>
+
+            <li><a asp-action="Index" asp-route-page="@soquaylai" asp-route-searchTerm="@sr"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
+            @if (Model.PageNumber > 4)
+            {
+                <li><span>...</span></li>
+            }
+            @for (var i = Model.PageNumber - 3; i < Model.PageNumber; i++)
+            {
+                if (i > 0)
+                {
+                    <li><a asp-action="Index" asp-route-page="@i" asp-route-searchTerm="@sr">@i</a></li>
+                }
+            }
+        }
+        <li class="active"><a>@Model.PageNumber</a></li>
+        @for (var i = Model.PageNumber + 1; i <= Model.PageNumber + 3; i++)
+        {
+            if (i <= Model.TotalPages)
+            {
+                <li><a asp-action="Index" asp-route-page="@i" asp-route-searchTerm="@sr">@i </a></li>
+            }
+        }
+        @if (Model.PageNumber < Model.TotalPages)
+        {
+            @if (Model.PageNumber < Model.TotalPages - 3)
+            {
+                <li><span>...</span></li>
+            }
+            <li><a asp-action="Index" asp-route-page="@sotienlen" asp-route-searchTerm="@sr"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+            <li><a asp-action="Index" asp-route-page="@Model.TotalPages" asp-route-searchTerm="@sr"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a></li>
+        }
+    </ul>
+    <div style="margin-left: auto; align-items: self-end !important;">
+        Đến Trang
+        <input type="text" id="pageInput" name="pageInput" style="width: 60px;"> / @Model.TotalPages
+        <div class="btn" id="goToPageButton">Đến</div>
+    </div>
+</div>
+
+
+<script>
+    $(".img_song").each(function (e, val) {
+        var id = $(this).attr("encodeid");
+        var thumbnail = $(this).attr("thumbnail");
+        loadImg(this, id, thumbnail);
+        console.log(id, thumbnail);
+
+    })
+    function loadImg(that, _id, _thumbnail) {
+        $.ajax({
+            url: "/PlaylistManagement/LoadImg",
+            data: {
+                encodeID: _id,
+                thumbnail: _thumbnail
+            },
+            success: function (data) {
+                // $('#img_song').html(data);
+                $(that).html('<img src="' + data + '"/>');
+            }
+        });
+    }
+    $(document).ready(function () {
+        $('#button-search').click(function () {
+            var searchTerm = $('#searchTerm').val();
+            window.location.href = '@Url.Action("Index", new { page = 1})' + '&searchTerm=' + searchTerm;
+        });
+        $('#searchTerm').keypress(function (e) {
+            var key = e.which;
+            if (key == 13) {
+                var searchTerm = $('#searchTerm').val();
+                window.location.href = '@Url.Action("Index", new { page =  1})' + '&searchTerm=' + searchTerm;
+            }
+        });
+        $('#goToPageButton').click(function (e) {
+            e.preventDefault();
+            var pageInput = $('#pageInput').val();
+            var maxpage = @Model.TotalPages;
+            var searchTerm = $('#searchTerm').val();
+
+            if (pageInput && !isNaN(pageInput) && pageInput > 0) {
+                if (pageInput > maxpage) {
+                    pageInput = maxpage;
+                }
+                var url = "/PlaylistManagement?page=" + pageInput;
+
+                if (searchTerm) {
+                    url += "&searchTerm=" + encodeURIComponent(searchTerm);
+                }
+
+                window.location.href = url;
+            }
+        });
+
+    });
+</script>
